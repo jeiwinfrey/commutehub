@@ -13,7 +13,7 @@ import { WeatherSheet } from "./weather-sheet";
 import { ensurePermission } from "@/lib/notify";
 
 // floats above the tab bar so nothing white sits underneath it
-const LIFT = "bottom-[calc(env(safe-area-inset-bottom)+92px)]";
+const LIFT = "bottom-[var(--lift)]";
 const PRIMARY_BTN = "w-full rounded-full bg-primary py-4 text-[16px] text-white disabled:opacity-40";
 const CHIP_BTN = "rounded-full bg-card px-3 py-1.5 text-[13px] text-foreground";
 
@@ -31,7 +31,7 @@ function DetailsCard({ t, classTime, vehicleId, onSelect, onChangeRide, onNext }
 }) {
   return (
     <div className={`absolute inset-x-4 ${LIFT} z-20`}>
-      <Squircle radius={32} className="flex max-h-[calc(100dvh-250px)] flex-col bg-background p-4">
+      <Squircle radius={32} className="flex max-h-[calc(100dvh-env(safe-area-inset-top)-var(--lift)-120px)] flex-col bg-background p-4">
         <div className="mb-3 flex shrink-0 items-center justify-between">
           <span className="text-[13px]">Pickup set on the route</span>
           <button onClick={onChangeRide} className={CHIP_BTN}>Change ride</button>

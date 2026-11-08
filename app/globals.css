@@ -25,6 +25,9 @@
   --input: #f2f2f7;
   --ring: transparent;
   --radius: 1.25rem;
+  /* floating tab bar: sits just above the home indicator, and cards float above it */
+  --tab-b: max(10px, calc(env(safe-area-inset-bottom) - 8px));
+  --lift: calc(var(--tab-b) + 78px);
 }
 
 @theme inline {
@@ -59,12 +62,12 @@
     -webkit-tap-highlight-color: transparent;
   }
   html {
-    @apply h-full;
+    @apply h-full overflow-hidden;
     overscroll-behavior: none;
   }
   body {
-    @apply bg-background text-muted-foreground min-h-full font-sans antialiased;
-    padding: env(safe-area-inset-top) 0 0;
+    @apply bg-background text-muted-foreground h-full overflow-hidden font-sans antialiased;
+    overscroll-behavior: none;
     user-select: none;
     -webkit-user-select: none;
   }

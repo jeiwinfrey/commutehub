@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SignInButton, useAuth } from "@clerk/nextjs";
+import { useAuth, useSignIn } from "@clerk/nextjs";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { PhoneFrame } from "@/components/app/phone-frame";
 
 export default function Home() {
   const { isLoaded, isSignedIn } = useAuth();
+  const { signIn } = useSignIn();
+  const [busy, setBusy] = useState(false);
   const router = useRouter();
   const [splash, setSplash] = useState(true);
 
@@ -30,9 +32,17 @@ export default function Home() {
             <div className="grid flex-1 place-items-center"><Image src="/illustrations/signin.svg" alt="A student waving at an approaching jeepney" width={320} height={320} priority /></div>
             <h1 className="text-[30px]">Know when your ride comes</h1>
             <p className="mb-3 text-[15px]">Live jeepney and bus ETAs, seat status and the best time to leave.</p>
-            <SignInButton mode="modal" forceRedirectUrl="/home">
-              <button className="rounded-full bg-foreground py-4 text-[16px] text-background">Continue with Google</button>
-            </SignInButton>
+            <button
+              disabled={busy || !signIn}
+              onClick={() => {
+                // straight to Google, no Clerk screen in between
+                setBusy(true);
+                signIn?.sso({ strategy: "oauth_google", redirectUrl: "/home", redirectCallbackUrl: "/sso-callback" }).then(({ error }) => { if (error) setBusy(false); }).catch(() => setBusy(false));
+              }}
+              className="rounded-full bg-foreground py-4 text-[16px] text-background disabled:opacity-60"
+            >
+              {busy ? "Opening Google…" : "Continue with Google"}
+            </button>
           </motion.div>
         ) : null}
       </AnimatePresence>

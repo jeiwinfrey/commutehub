@@ -30,7 +30,7 @@ export function TabBar({
     <nav
       className={cn(
         "pointer-events-none absolute inset-x-0 bottom-0 z-30 px-4",
-        floating ? "pb-[calc(env(safe-area-inset-bottom)+12px)]" : "bg-background px-0 pb-[env(safe-area-inset-bottom)]",
+        floating ? "pb-[var(--tab-b)]" : "bg-background px-0 pb-[env(safe-area-inset-bottom)]",
       )}
     >
       <Squircle radius={floating ? 28 : 0} className={cn("pointer-events-auto flex p-1.5", onMap || !floating ? "bg-background" : "bg-card")}>
