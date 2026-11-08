@@ -27,16 +27,19 @@ export default function HomePage() {
       {!user ? (
         <div className="grid h-full place-items-center text-[14px]">Loading…</div>
       ) : !user.onboarded ? (
-        <Onboarding name={user.name} />
+        <div className="h-full pt-[env(safe-area-inset-top)]"><Onboarding name={user.name} /></div>
       ) : (
         <div className="relative h-full">
           <AlertNotifier user={user} />
-          <div className="h-full">
-            {tab === "home" && <HomeScreen classTime={user.classTime} />}
-            {tab === "plan" && <PlanScreen />}
-            {tab === "alerts" && <AlertsScreen user={user} />}
-            {tab === "me" && <MeScreen user={user} />}
-          </div>
+          {tab === "home" ? (
+            <HomeScreen classTime={user.classTime} />
+          ) : (
+            <div className="h-full pt-[env(safe-area-inset-top)]">
+              {tab === "plan" && <PlanScreen />}
+              {tab === "alerts" && <AlertsScreen user={user} />}
+              {tab === "me" && <MeScreen user={user} />}
+            </div>
+          )}
           <TabBar active={tab} onChange={setTab} floating onMap={tab === "home"} />
         </div>
       )}

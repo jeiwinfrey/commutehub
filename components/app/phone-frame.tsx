@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
     <div className="h-dvh bg-card">
-      {/* the notch / status bar area is reserved as a solid band, so nothing sits under it */}
-      <div className="relative mx-auto h-full max-w-[430px] overflow-hidden bg-background pt-[env(safe-area-inset-top)]">{children}</div>
+      {/* edge to edge: screens add the status-bar spacing themselves, so the map can run under it */}
+      <div className="relative mx-auto h-full max-w-[430px] overflow-hidden bg-background">{children}</div>
     </div>
   );
 }

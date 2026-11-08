@@ -11,6 +11,7 @@ import { useTracker, type Tracker } from "@/lib/use-tracker";
 import { useWeather } from "@/lib/use-weather";
 import { WeatherSheet } from "./weather-sheet";
 import { ensurePermission } from "@/lib/notify";
+import { useSafeTop } from "@/lib/use-safe-top";
 
 // floats above the tab bar so nothing white sits underneath it
 const LIFT = "bottom-[var(--lift)]";
@@ -104,6 +105,7 @@ function ZoneCard({ t, vehicleId, radius, setRadius, onBack, onDone }: {
 export function HomeScreen({ classTime }: { classTime: string }) {
   const t = useTracker();
   const w = useWeather();
+  const safeTop = useSafeTop();
   const [step, setStep] = useState<"route" | "pickup" | "ride" | "details" | "zone">("route");
   const [vehicleId, setVehicleId] = useState<string | null>(null);
   const [radius, setRadius] = useState(500);
@@ -115,9 +117,9 @@ export function HomeScreen({ classTime }: { classTime: string }) {
   return (
     <div className="relative h-full">
       <div className="absolute inset-0">
-        <MapView t={t} pickMode={step === "route" || step === "pickup"} tapToPick={step === "pickup"} vehicleId={step === "details" || step === "zone" ? vehicleId : null} zoneRadius={step === "zone" ? radius : null} pad={{ top: 80, bottom }} />
+        <MapView t={t} pickMode={step === "route" || step === "pickup"} tapToPick={step === "pickup"} vehicleId={step === "details" || step === "zone" ? vehicleId : null} zoneRadius={step === "zone" ? radius : null} pad={{ top: 80 + safeTop, bottom }} />
       </div>
-      <div className="absolute inset-x-4 top-3 z-20 flex items-center justify-between">
+      <div className="absolute inset-x-4 top-[calc(env(safe-area-inset-top)+12px)] z-20 flex items-center justify-between">
         <WeatherChip w={w} className="bg-background" onClick={() => setWeatherOpen(true)} />
         <ReportButton t={t} />
       </div>

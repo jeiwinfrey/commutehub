@@ -1,4 +1,4 @@
-const CACHE = "commutehub-v2";
+const CACHE = "commutehub-v3";
 const SHELL = ["/", "/home", "/offline"];
 
 self.addEventListener("install", (e) => {
