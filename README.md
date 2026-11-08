@@ -1,0 +1,29 @@
+# CommuteHub
+
+A mobile-first PWA for commuters in Ilocos Norte: live jeepney, modern jeepney and bus ETAs with seat status, a leave-by time that reacts to delay reports, a transfer planner, weather and rush-hour alerts, and an arrival alert zone around your pickup.
+
+Built with Next.js, Convex, Clerk (Google sign-in), shadcn/ui, mapcn (MapLibre), Lisse, motion and OSRM routes.
+
+## Run it
+
+```bash
+pnpm install
+npx convex dev          # creates your Convex dev deployment and writes .env.local
+npx convex run seed:run # routes (via OSRM), places and vehicles
+pnpm dev
+```
+
+Set these in `.env.local` (and on your host):
+
+| Variable | Where |
+|---|---|
+| `NEXT_PUBLIC_CONVEX_URL` | Convex deployment URL |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key |
+| `CLERK_JWT_ISSUER_DOMAIN` | Convex env var: your Clerk Frontend API URL (turn on Clerk's Convex integration) |
+
+Icons come from Central Icons (`central-icons`), which needs your own license.
+
+## Notes
+
+- Illustrations live in `public/illustrations/`; their prompts are in `prompt.md`.
+- Mobile only: on wider screens the app shows as a centered phone-sized column.

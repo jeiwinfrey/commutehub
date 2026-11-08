@@ -1,0 +1,108 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import type { Doc, Id } from "@/convex/_generated/dataModel";
+import { etaMinutes, pointAt, snap, type LngLat } from "./geo";
+
+export type Place = Doc<"places">;
+export type RouteHit = Doc<"routes"> & { dir: 1 | -1; fromAt: number; toAt: number };
+export type Service = {
+  route: RouteHit;
+  pickupAt: number;
+  vehicles: { v: Doc<"vehicles">; eta: number }[];
+  next: number | null;
+  rideMin: number;
+};
+
+const typeOrder = { modern_jeepney: 0, jeepney: 1, bus: 2, tricycle: 3 } as const;
+
+export function useTracker() {
+  const places = useQuery(api.places.list);
+  const [from, setFrom] = useState("laoag");
+  const [to, setTo] = useState("batac");
+  const [pickup, setPickup] = useState<LngLat | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+
+  const routes = useQuery(api.routes.between, from && to && from !== to ? { from, to } : "skip") as RouteHit[] | undefined;
+  const vehicles = useQuery(api.vehicles.forRoutes, routes ? { routeIds: routes.map((r) => r._id) } : "skip");
+  const reports = useQuery(api.reports.active) ?? [];
+
+  const fromPlace = places?.find((p) => p.slug === from);
+  const toPlace = places?.find((p) => p.slug === to);
+
+  // pickup always sits on the first route's polyline (snapped); default is the origin stop
+  const pickupPoint: LngLat | null = useMemo(() => {
+    if (!routes?.length) return null;
+    const base = pickup ?? (fromPlace ? ([fromPlace.lng, fromPlace.lat] as LngLat) : null);
+    if (!base) return null;
+    return snap(routes[0], base[0], base[1]).point;
+  }, [routes, pickup, fromPlace]);
+
+  const services: Service[] = useMemo(() => {
+    if (!routes || !vehicles || !pickupPoint) return [];
+    return routes
+      .map((route) => {
+        const s = snap(route, pickupPoint[0], pickupPoint[1]);
+        const delay = reports.filter((r) => !r.routeId || r.routeId === route._id).reduce((m, r) => Math.max(m, r.delayMin), 0);
+        const vs = vehicles
+          .filter((v) => v.routeId === route._id)
+          .map((v) => ({ v, eta: etaMinutes(v, route.dir, s.at, route.cum[route.cum.length - 1], delay) }))
+                    .sort((a, b) => a.eta - b.eta);
+        const avg = vehicles.filter((v) => v.routeId === route._id).reduce((a, v) => a + v.speed, 0) / 4 || 9;
+        const rideMin = Math.round(Math.abs(route.toAt - s.at) / avg / 60) + delay;
+        return { route, pickupAt: s.at, vehicles: vs, next: vs[0]?.eta ?? null, rideMin };
+      })
+      .sort((a, b) => typeOrder[a.route.type] - typeOrder[b.route.type]);
+  }, [routes, vehicles, pickupPoint, reports]);
+
+  const active = services.find((s) => s.route.slug === selected) ?? null;
+  const delayMin = reports.reduce((m, r) => Math.max(m, r.delayMin), 0);
+  const createReport = useMutation(api.reports.create);
+
+  return {
+    places, from, to,
+    hasRoutes: routes ? routes.length > 0 : null, // null while loading
+    setFrom: (v: string) => { setFrom(v); setPickup(null); setSelected(null); },
+    setTo: (v: string) => { setTo(v); setPickup(null); setSelected(null); },
+    fromPlace, toPlace,
+    pickupPoint, setPickup: (p: LngLat) => setPickup(p),
+    // back to a clean start: default pickup, no ride chosen
+    reset: () => { setPickup(null); setSelected(null); },
+    services, active, selected, setSelected,
+    reports, delayMin,
+    report: (kind: Doc<"reports">["kind"], delay: number) => {
+      const at = pickupPoint ?? [120.59, 18.19];
+      return createReport({ kind, delayMin: delay, routeId: active?.route._id as Id<"routes"> | undefined, lng: at[0], lat: at[1] });
+    },
+    pointAt,
+  };
+}
+
+export type Tracker = ReturnType<typeof useTracker>;
+
+export const TYPE_LABEL = { jeepney: "Jeepney", modern_jeepney: "Modern jeepney", bus: "Bus", tricycle: "Tricycle" } as const;
+
+export const fmt12 = (min: number) => {
+  const m = ((Math.round(min) % 1440) + 1440) % 1440;
+  const h = Math.floor(m / 60);
+  return `${h % 12 || 12}:${String(m % 60).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+};
+
+/** The ride the Leave-by time is based on: the chosen one, else whichever comes soonest. */
+export function bestService(t: Pick<Tracker, "active" | "services">) {
+  return t.active ?? [...t.services].filter((s) => s.next !== null).sort((a, b) => a.next! - b.next!)[0] ?? null;
+}
+
+/** Minutes after midnight when you should leave (can be negative if it falls on the previous day). */
+export function leaveByMinutes(classTime: string, svc: Service | null, delayMin: number, bufferMin = 10) {
+  const [h, m] = classTime.split(":").map(Number);
+  const wait = svc?.next ?? 0;
+  const ride = svc?.rideMin ?? 30;
+  return h * 60 + m - (wait + ride + bufferMin + (svc ? 0 : delayMin));
+}
+
+export function leaveBy(classTime: string, svc: Service | null, delayMin: number, bufferMin = 10) {
+  return fmt12(leaveByMinutes(classTime, svc, delayMin, bufferMin)).replace(/ [AP]M$/, "");
+}
