@@ -23,9 +23,9 @@ export const tick = internalMutation({
       const total = route.cum[route.cum.length - 1];
       const factor = slow.some((r) => r.routeId === veh.routeId) ? 0.5 : 1;
       let progress = veh.progress + veh.dir * veh.speed * 10 * factor;
-      let dir = veh.dir;
-      if (progress >= total) { progress = total; dir = -1; }
-      if (progress <= 0) { progress = 0; dir = 1; }
+      const dir = veh.dir; // fixed role: outbound vehicles always head to the destination, inbound ones back
+      if (dir === 1 && progress >= total) progress -= total; // back to the start of the run
+      if (dir === -1 && progress <= 0) progress += total;
       const roll = Math.random();
       const seat = roll < 0.06 ? (["open", "few", "full"] as const)[Math.floor(Math.random() * 3)] : veh.seat;
       moved.set(veh._id, { progress, dir });

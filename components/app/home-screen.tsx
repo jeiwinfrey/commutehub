@@ -34,7 +34,7 @@ function DetailsCard({ t, classTime, vehicleId, onSelect, onChangeRide, onNext }
     <div className={`absolute inset-x-4 ${LIFT} z-20`}>
       <Squircle radius={32} className="flex max-h-[calc(100dvh-env(safe-area-inset-top)-var(--lift)-120px)] flex-col bg-background p-4">
         <div className="mb-3 flex shrink-0 items-center justify-between">
-          <span className="text-[13px]">Pickup set on the route</span>
+          <span className="min-w-0 truncate text-[13px]">Pickup · {t.pickupLabel}</span>
           <button onClick={onChangeRide} className={CHIP_BTN}>Change ride</button>
         </div>
         <div className="mb-3 shrink-0"><LeaveByCard t={t} classTime={classTime} compact /></div>
@@ -140,7 +140,13 @@ export function HomeScreen({ classTime }: { classTime: string }) {
             <button onClick={() => setStep("route")} className={CHIP_BTN}>Change route</button>
           </div>
           <p className="mt-1 text-[13px] text-foreground">{t.fromPlace?.name} → {t.toPlace?.name}</p>
-          <p className="mb-4 mt-1 text-[14px]">Tap the blue route where you'll wait. The pin snaps to the road.</p>
+          <p className="mb-2 mt-2 text-[13px]">Common pickup spots</p>
+          <div className="-mx-5 mb-2 flex gap-2 overflow-x-auto px-5">
+            {t.pickupOptions.map((o) => (
+              <button key={o.name} onClick={() => t.setPickup(o.point, o.name)} className={`shrink-0 rounded-full px-4 py-2.5 text-[14px] ${t.pickupLabel === o.name ? "bg-primary text-white" : "bg-card text-foreground"}`}>{o.name}</button>
+            ))}
+          </div>
+          <p className="mb-4 text-[13px]">Or tap the blue route where you'll wait. The pin snaps to the road.</p>
           <button disabled={!t.pickupPoint} onClick={() => setStep("ride")} className={PRIMARY_BTN}>Confirm pickup</button>
         </Card>
       )}

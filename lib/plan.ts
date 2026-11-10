@@ -47,7 +47,7 @@ export function planTrips(routes: Route[], vehicles: Vehicle[], reports: Report[
       const vs = vehicles.filter((v) => v.routeId === route._id);
       const speed = vs.reduce((m, v) => m + v.speed, 0) / (vs.length || 1) || 9;
       const delay = reports.filter((r) => !r.routeId || r.routeId === route._id).reduce((m, r) => Math.max(m, r.delayMin), 0);
-      const etas = vs.map((v) => etaMinutes(v, dir, sa.at, total, delay)).sort((x, y) => x - y);
+      const etas = vs.map((v) => etaMinutes(v, dir, sa.at, total, delay)).filter(Number.isFinite).sort((x, y) => x - y);
       const start = etas.find((e) => e >= t) ?? t + 12;
       const ride = Math.round(Math.abs(sb.at - sa.at) / speed / 60) + delay;
       const leg: Leg = { route, from: a, to: b, fromName: sa.name, toName: sb.name, wait: start - t, ride, start, end: start + ride, delay };

@@ -41,8 +41,9 @@ export function pointAt(route: RouteGeo, at: number): LngLat {
 
 /**
  * Minutes until a vehicle next reaches `pickupAt` while travelling in `dir`.
- * Vehicles shuttle end to end, so one that is heading away or already past
- * the pickup comes back around after turning at the terminal.
+ * Vehicles keep their direction and loop back to the start of the run, so one that already
+ * passed the pickup arrives again after the loop. A vehicle going the other way never serves
+ * this direction, so it returns Infinity.
  */
 export function etaMinutes(
   v: { progress: number; dir: 1 | -1; speed: number },
@@ -51,14 +52,9 @@ export function etaMinutes(
   total: number,
   extraDelayMin = 0,
 ) {
-  const p = v.progress;
-  const ahead = dir * (pickupAt - p);
-  let dist: number;
-  if (v.dir === dir) {
-    dist = ahead >= -30 ? Math.max(0, ahead) : dir === 1 ? total - p + total + pickupAt : p + total + (total - pickupAt);
-  } else {
-    dist = dir === 1 ? p + pickupAt : total - p + (total - pickupAt);
-  }
+  if (v.dir !== dir) return Infinity;
+  const ahead = dir * (pickupAt - v.progress);
+  const dist = ahead >= -30 ? Math.max(0, ahead) : total + ahead;
   return Math.max(0, Math.round(dist / v.speed / 60 + extraDelayMin));
 }
 

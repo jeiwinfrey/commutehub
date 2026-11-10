@@ -69,26 +69,41 @@ export function RideChooser({ t }: { t: Tracker }) {
   );
 }
 
-/** Step 3: vehicles for the chosen ride with ETA and seat status. Tap one to pick it. */
+const STATUS_CHIP = {
+  incoming: { label: "Incoming", cls: "bg-success/15 text-success" },
+  passed: { label: "Passed", cls: "bg-background text-muted-foreground" },
+  other: { label: "Other direction", cls: "bg-background text-muted-foreground" },
+} as const;
+
+/** Step 3: vehicles for the chosen ride, with whether each is heading toward you. Tap one to pick it. */
 export function VehicleList({ t, selectedId, onSelect }: { t: Tracker; selectedId: string | null; onSelect: (id: string) => void }) {
   if (!t.active) return null;
+  const stops = t.active.route.stops;
   return (
     <div className="flex flex-col gap-2">
       <p className="px-1 text-[13px]">{t.active.route.name} · {TYPE_LABEL[t.active.route.type]}</p>
-      {t.active.vehicles.map(({ v, eta }) => (
-        <button key={v._id} onClick={() => onSelect(v._id)} className="block w-full text-left">
-          <Squircle radius={20} className={cn("flex items-center justify-between px-4 py-3.5", selectedId === v._id ? "bg-primary/12" : "bg-card")}>
-            <span className="flex items-center gap-3">
-              <span className="grid size-10 place-items-center rounded-2xl bg-background text-primary"><IconBus size={22} /></span>
-              <span>
-                <span className="block text-[15px] text-foreground">{v.label}</span>
-                <span className="block text-[12px]">{eta} min away</span>
+      {t.active.vehicles.map(({ v, eta, status, distKm }) => {
+        const chip = STATUS_CHIP[status];
+        // where it is going, from the route's own ends
+        const heading = (v.dir === 1 ? stops[stops.length - 1] : stops[0])?.name;
+        return (
+          <button key={v._id} disabled={status === "other"} onClick={() => onSelect(v._id)} className="block w-full text-left disabled:opacity-50">
+            <Squircle radius={20} className={cn("flex items-center justify-between px-4 py-3.5", selectedId === v._id ? "bg-primary/12" : "bg-card")}>
+              <span className="flex min-w-0 items-center gap-3">
+                <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-background text-primary"><IconBus size={22} /></span>
+                <span className="min-w-0">
+                  <span className="block text-[15px] text-foreground">{v.label}</span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[12px]">
+                    <span className={cn("rounded-full px-2 py-0.5", chip.cls)}>{chip.label}</span>
+                    <span>{status === "incoming" ? `${eta} min · ${distKm.toFixed(1)} km` : status === "passed" ? "Already past your pickup" : `Heading to ${heading}`}</span>
+                  </span>
+                </span>
               </span>
-            </span>
-            <SeatBadge seat={v.seat} />
-          </Squircle>
-        </button>
-      ))}
+              <SeatBadge seat={v.seat} />
+            </Squircle>
+          </button>
+        );
+      })}
     </div>
   );
 }

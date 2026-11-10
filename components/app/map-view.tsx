@@ -5,9 +5,16 @@ import { Map, MapRoute, MapMarker, MarkerContent, useMap } from "@/components/ui
 import type { GeoJSONSource } from "maplibre-gl";
 import { boundsOf, circleRing, pointAt, type LngLat } from "@/lib/geo";
 import type { Tracker } from "@/lib/use-tracker";
-import { IconMapPin, IconBus } from "central-icons";
+import { IconMapPin, IconArrowUp } from "central-icons";
 
 const SEAT = { open: "#00CC3F", few: "#00A6FF", full: "#8D8D8E" } as const;
+
+/** Compass bearing in degrees (0 = north) of a vehicle's travel, from two points a little apart on its route. */
+function bearingOf(route: { geometry: number[][]; cum: number[] }, progress: number, dir: 1 | -1) {
+  const a = pointAt(route, progress), b = pointAt(route, progress + dir * 80);
+  const k = Math.cos((a[1] * Math.PI) / 180);
+  return (Math.atan2((b[0] - a[0]) * k, b[1] - a[1]) * 180) / Math.PI;
+}
 
 function Fit({ points, pad }: { points: number[][]; pad: { top: number; bottom: number } }) {
   const { map, isLoaded } = useMap();
@@ -120,14 +127,17 @@ export function MapView({ t, pad = { top: 140, bottom: 260 }, pickMode = false, 
         />
       ))}
       {!pickMode && shown.flatMap((s) =>
-        s.vehicles.filter(({ v }) => !zoneRadius || v._id === vehicleId).map(({ v, eta }) => {
+        s.vehicles.filter(({ v }) => !zoneRadius || v._id === vehicleId).map(({ v, eta, status }) => {
           const [lng, lat] = pointAt(s.route, v.progress);
-          const dim = vehicleId && v._id !== vehicleId;
+          const picked = v._id === vehicleId;
+          // not-incoming vehicles fade back so the ones coming to you stand out
+          const opacity = picked || (!vehicleId && status === "incoming") ? 1 : 0.4;
           return (
             <MapMarker key={v._id} longitude={lng} latitude={lat}>
               <MarkerContent>
-                <div className="flex items-center gap-1 rounded-full px-2 py-1 text-[11px] text-white" style={{ background: SEAT[v.seat], opacity: dim ? 0.45 : 1, transform: v._id === vehicleId ? "scale(1.25)" : undefined }}>
-                  <IconBus size={14} /> {eta}m
+                <div className="flex items-center gap-1 rounded-full px-2 py-1 text-[11px] text-white" style={{ background: SEAT[v.seat], opacity, transform: picked ? "scale(1.25)" : undefined }}>
+                  <IconArrowUp size={14} style={{ transform: `rotate(${bearingOf(s.route, v.progress, v.dir)}deg)` }} />
+                  {status === "incoming" ? `${eta}m` : ""}
                 </div>
               </MarkerContent>
             </MapMarker>

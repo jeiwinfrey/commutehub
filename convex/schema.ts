@@ -25,6 +25,8 @@ export default defineSchema({
     name: v.string(),
     lat: v.number(),
     lng: v.number(),
+    // notable, common pickup spots in this place, as meters along the route from its stop
+    landmarks: v.optional(v.array(v.object({ name: v.string(), offsetM: v.number() }))),
   }).index("by_slug", ["slug"]),
 
   routes: defineTable({
@@ -39,6 +41,8 @@ export default defineSchema({
     fare: v.number(),
     geometry: v.array(v.array(v.number())), // [lng, lat]
     cum: v.array(v.number()), // cumulative meters per vertex
+    // named roadside pickup spots along the route, as meters from its start
+    pickups: v.optional(v.array(v.object({ name: v.string(), at: v.number() }))),
     stops: v.array(
       v.object({
         slug: v.string(),
