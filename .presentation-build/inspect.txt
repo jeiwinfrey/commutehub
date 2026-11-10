@@ -1,0 +1,651 @@
+{"kind":"layout","id":"ly/atofqts7","editable":false,"name":"","type":"master"}
+{"kind":"layout","id":"ly/ux4ruhcv","editable":false,"name":"BLANK","type":"blank"}
+{"kind":"layout","id":"ly/p83mt83u","editable":false,"name":"TITLE","type":"title","placeholders":[{"name":"title","type":"title"},{"name":"subtitle","type":"subtitle"}]}
+{"kind":"layout","id":"ly/4v2ps7ql","editable":false,"name":"Section Header","type":"","placeholders":[{"name":"title","type":"title"}]}
+{"kind":"layout","id":"ly/3yt8jipk","editable":false,"name":"Title and Body","type":"","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+{"kind":"layout","id":"ly/elwrupwj","editable":false,"name":"Title and Two Column","type":"","placeholders":[{"name":"title","type":"title"},{"name":"Google Shape;21;p6","type":"body"},{"name":"Google Shape;22;p6","type":"body"}]}
+{"kind":"layout","id":"ly/14ra9krq","editable":false,"name":"Title and One Column","type":"","placeholders":[{"name":"title","type":"title"},{"name":"body","type":"body"}]}
+slides 19 masters 1
+1 y90nupkv [
+  {
+    id: '49',
+    name: 'MMSU\nCommuteHub',
+    text: 'MMSU\nCommuteHub',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'A mobile commute planning app\nfor MMSU s',
+    text: 'A mobile commute planning app\nfor MMSU student commuters',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Design Thinking and UI/UX\nResearch, desi',
+    text: 'Design Thinking and UI/UX\nResearch, design and live demonstration',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Russel  ·  45 seconds',
+    text: 'Jeiwinfrey  ·  45 seconds',
+    position: t {}
+  },
+  { id: '54', name: '01', text: '01', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+2 hwbqtkby [
+  {
+    id: '49',
+    name: 'EMPATHIZE & DEFINE',
+    text: 'EMPATHIZE & DEFINE',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'The commuting concern',
+    text: 'The commuting concern',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: '100 eligible student commuters\n\n104 subm',
+    text: '100 student respondents\n' +
+      '\n' +
+      'Survey: 22-24 September 2026\n' +
+      '\n' +
+      '70% live at least 5 km from school',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Aira  ·  55 seconds',
+    text: 'Aira  ·  55 seconds',
+    position: t {}
+  },
+  { id: '54', name: '02', text: '02', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+3 ofy9wn61 [
+  {
+    id: '49',
+    name: 'EMPATHIZE & DEFINE',
+    text: 'EMPATHIZE & DEFINE',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'Waiting affects class attendance',
+    text: 'Waiting affects class attendance',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: '65% selected long waits\n\n57% selected ov',
+    text: '65% selected long waits\n' +
+      '\n' +
+      '57% selected overcrowding\n' +
+      '\n' +
+      '54% wait 15+ minutes at peak hours\n' +
+      '\n' +
+      '38% are late often or always',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Ashley  ·  55 seconds',
+    text: 'Ashley  ·  55 seconds',
+    position: t {}
+  },
+  { id: '54', name: '03', text: '03', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+4 jyx0ra1s [
+  {
+    id: '49',
+    name: 'EMPATHIZE & DEFINE',
+    text: 'EMPATHIZE & DEFINE',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'Our problem statement',
+    text: 'Our problem statement',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Need: clearer route, fare and departure ',
+    text: 'Need: clearer route, fare and departure information\n' +
+      '\n' +
+      'Concern: uncertain waits and crowding\n' +
+      '\n' +
+      'How might we help students decide when, where and what to ride?',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Kathrina  ·  55 seconds',
+    text: 'Kathrina  ·  55 seconds',
+    position: t {}
+  },
+  { id: '54', name: '04', text: '04', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+5 i107q5of [
+  {
+    id: '49',
+    name: 'IDEATE & SYSTEM DESIGN',
+    text: 'IDEATE & SYSTEM DESIGN',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'Ideas and the chosen solution',
+    text: 'Ideas and the chosen solution',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Timetable page: simple, limited during c',
+    text: 'Timetable page: simple, limited during changes\n' +
+      '\n' +
+      'Group chat: easy sharing, scattered updates\n' +
+      '\n' +
+      'Chosen: one app for commute decisions',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Jeiwinfrey  ·  60 seconds',
+    text: 'Jeiwinfrey  ·  60 seconds',
+    position: t {}
+  },
+  { id: '54', name: '05', text: '05', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+6 x8f69ofe [
+  {
+    id: '49',
+    name: 'IDEATE & SYSTEM DESIGN',
+    text: 'IDEATE & SYSTEM DESIGN',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'Features for commuter tasks',
+    text: 'Features for commuter tasks',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Find a ride: routes and fare estimates\n\n',
+    text: 'Find a ride: routes and fare estimates\n' +
+      '\n' +
+      'Prepare to board: pickup and tracking\n' +
+      '\n' +
+      'Plan for class: departures and reminders\n' +
+      '\n' +
+      'Stay informed: reports and alerts',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Michaella  ·  60 seconds',
+    text: 'Michaella  ·  60 seconds',
+    position: t {}
+  },
+  { id: '54', name: '06', text: '06', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+7 gnmp4jqx [
+  {
+    id: '49',
+    name: 'SYSTEM DESIGN',
+    text: 'SYSTEM DESIGN',
+    position: t {}
+  },
+  {
+    id: '50',
+    name: 'How the prototype works',
+    text: 'How the prototype works',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Mobile PWA with Clerk sign-in\n\nConvex st',
+    text: 'A mobile app for student commuters\n' +
+      '\n' +
+      'Plan trips and compare ride options\n' +
+      '\n' +
+      'Follow simulated vehicle movement\n' +
+      '\n' +
+      'Save trips, plans and preferences',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'France  ·  30 seconds',
+    text: 'France  ·  30 seconds',
+    position: t {}
+  },
+  { id: '54', name: '07', text: '07', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]
+8 fu1gfa1s [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  {
+    id: '50',
+    name: 'Login screen',
+    text: 'Login screen',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Enter through the sign-in screen\n\nContin',
+    text: 'Functional Google sign-in\n\nSign in with your Google account',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'TAM: familiar entry reduces effort',
+    text: 'TAM: familiar entry reduces effort',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Russel  ·  20 seconds',
+    text: 'Russel  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '08', text: '08', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+9 udsvah03 [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Onboarding', text: 'Onboarding', position: t {} },
+  {
+    id: '51',
+    name: 'Find your ride • Choose your pickup\n\nMak',
+    text: 'Illustrations explain each step\n\nSet preferences and alert choices',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UI/UX: clear instructions and visible pr',
+    text: 'UI/UX: visual guidance, progress and clear feedback',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Aira  ·  20 seconds',
+    text: 'Aira  ·  30 seconds',
+    position: t {}
+  },
+  { id: '56', name: '09', text: '09', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+10 m90b6t0r [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Routes', text: 'Routes', position: t {} },
+  {
+    id: '51',
+    name: 'Choose origin and destination\n\nReview th',
+    text: 'Choose origin and destination\n\nReview the supported route and stops',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Task-Technology Fit: support the route d',
+    text: 'Task-Technology Fit and helpful empty states',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Ashley  ·  20 seconds',
+    text: 'Ashley  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '10', text: '10', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+11 jetc3ut0 [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  {
+    id: '50',
+    name: 'Pickup point',
+    text: 'Pickup point',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Choose a candidate pickup point\n\nSet the',
+    text: 'Choose a candidate pickup point\n\nSet the proximity alert radius',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UI/UX: user control and clear consequenc',
+    text: 'UI/UX: user control and helpful error guidance',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Kathrina  ·  20 seconds',
+    text: 'Kathrina  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '12', text: '11', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+12 8f2psfyx [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  {
+    id: '50',
+    name: 'Vehicles and fares',
+    text: 'Vehicles and fares',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Compare available simulated rides\n\nCheck',
+    text: 'Compare available simulated rides\n' +
+      '\n' +
+      'Check arrival, crowding and fare estimates',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Prospect Theory: make differences clear',
+    text: 'Clear comparisons and useful next-step messages',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Jeiwinfrey  ·  25 seconds',
+    text: 'Jeiwinfrey  ·  30 seconds',
+    position: t {}
+  },
+  { id: '56', name: '11', text: '12', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+13 hgzapcr6 [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Tracking', text: 'Tracking', position: t {} },
+  {
+    id: '51',
+    name: 'Watch simulated progress along the route',
+    text: 'Watch simulated progress along the route\n\nConfirm boarding when ready',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UI/UX: visibility of system status',
+    text: 'UI/UX: visible progress and clear trip status',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'France  ·  25 seconds',
+    text: 'France  ·  30 seconds',
+    position: t {}
+  },
+  { id: '56', name: '13', text: '13', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+14 6lsnupw7 [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Trips', text: 'Trips', position: t {} },
+  {
+    id: '51',
+    name: 'Review the active trip\n\nConfirm completi',
+    text: 'Review the active trip\n\nConfirm completion and inspect history',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UI/UX: feedback after a completed action',
+    text: 'UI/UX: illustrated empty states and action feedback',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Rocky  ·  20 seconds',
+    text: 'Rocky  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '14', text: '14', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+15 vaxsvy10 [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  {
+    id: '50',
+    name: 'Departure planner',
+    text: 'Departure planner',
+    position: t {}
+  },
+  {
+    id: '51',
+    name: 'Enter the class arrival goal\n\nCompare de',
+    text: 'Enter the class arrival goal\n\nCompare departures and save a plan',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Task-Technology Fit: plan around class t',
+    text: 'Task fit, visual guidance and input feedback',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Michaella  ·  25 seconds',
+    text: 'Michaella  ·  30 seconds',
+    position: t {}
+  },
+  { id: '56', name: '15', text: '15', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+16 gny5sjyp [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Community', text: 'Community', position: t {} },
+  {
+    id: '51',
+    name: 'Read reports for the relevant route\n\nIns',
+    text: 'Read reports for the relevant route\n' +
+      '\n' +
+      'Inspect confirmation, reporting and resolution controls',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UTAUT: peer information; trust still nee',
+    text: 'UTAUT: peer sharing and clear feedback',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Kacey  ·  25 seconds',
+    text: 'Kacey  ·  30 seconds',
+    position: t {}
+  },
+  { id: '56', name: '16', text: '16', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+17 14bup87q [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Alerts', text: 'Alerts', position: t {} },
+  {
+    id: '51',
+    name: 'Review relevant in-app updates\n\nCheck th',
+    text: 'Review relevant in-app updates\n\nCheck the report or plan behind an alert',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'UI/UX: relevant feedback with context',
+    text: 'UI/UX: reassuring empty states and relevant updates',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Princess  ·  20 seconds',
+    text: 'Princess  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '17', text: '17', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+18 y5wne50z [
+  { id: '49', name: 'LIVE DEMO', text: 'LIVE DEMO', position: t {} },
+  { id: '50', name: 'Profile', text: 'Profile', position: t {} },
+  {
+    id: '51',
+    name: 'Review preferences and notification cont',
+    text: 'Review preferences and notification controls\n' +
+      '\n' +
+      'Keep account actions under user control',
+    position: t {}
+  },
+  {
+    id: '52',
+    name: 'CLASS CONNECTION',
+    text: 'CLASS CONNECTION',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'Loss aversion: explain irreversible acti',
+    text: 'User control, clear labels and confirmations',
+    position: t {}
+  },
+  {
+    id: '55',
+    name: 'Chadrick  ·  20 seconds',
+    text: 'Chadrick  ·  25 seconds',
+    position: t {}
+  },
+  { id: '56', name: '18', text: '18', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '54', name: '', position: t {} }
+]
+19 nid43ytk [
+  {
+    id: '49',
+    name: '3–5 MINUTES',
+    text: 'CLOSING & Q&A',
+    position: t {}
+  },
+  { id: '50', name: 'Thank you', text: 'Thank you', position: t {} },
+  {
+    id: '51',
+    name: 'Questions & answers\n\nResearch, design ch',
+    text: 'Questions & answers\n\nResearch, design choices and the live prototype',
+    position: t {}
+  },
+  {
+    id: '53',
+    name: 'All 11 members',
+    text: 'Jeiwinfrey  ·  30 seconds',
+    position: t {}
+  },
+  { id: '54', name: '19', text: '19', position: t {} }
+] [
+  { id: '48', name: 'Google Shape;48;p10', position: t {} },
+  { id: '52', name: '', position: t {} }
+]

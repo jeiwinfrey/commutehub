@@ -9,6 +9,7 @@ import { SelectField, TimeField } from "./sheet-picker";
 import { ensurePermission } from "@/lib/notify";
 import { Switch } from "@/components/ui/switch";
 import { InstallGuide } from "./install-guide";
+import { PreviewAlerts } from "./preview-alerts";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return <div className="flex items-center justify-between gap-3 py-2.5"><span className="text-[15px] text-foreground">{label}</span>{children}</div>;
@@ -56,6 +57,7 @@ export function MeScreen({ user }: { user: Doc<"users"> }) {
       <h2 className="mb-1 mt-4 px-1 text-[13px] text-muted-foreground">App</h2>
       <Squircle radius={24} className="bg-card px-4 py-1">
         <InstallGuide row={(label, right) => <Row label={label}>{right}</Row>} />
+        <PreviewAlerts row={(label, right) => <Row label={label}>{right}</Row>} />
         <Row label="Distance units"><span className="text-[14px]">Kilometers</span></Row>
         <Row label="Version"><span className="text-[14px]">1.0.0</span></Row>
       </Squircle>

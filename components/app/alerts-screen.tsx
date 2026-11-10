@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from "react";
 import Image from "next/image";
 import type { Doc } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { IconBus, IconCloudy, IconRainy, IconSun, IconClockAlert, IconWarningSign } from "central-icons";
 import { Squircle } from "./squircle";
@@ -26,8 +26,10 @@ export function useAlerts(user: Doc<"users">) {
   const home = user.homePlace ?? "your stop";
 
   return useMemo(() => {
+    const ICON = { weather: IconRainy, rush: IconClockAlert, delay: IconWarningSign, arrival: IconBus } as const;
+    const TONE = { weather: "text-primary", rush: "text-success", delay: "text-destructive", arrival: "text-primary" } as const;
     const list: Alert[] = arrivals.map((a) => ({
-      id: a._id, kind: "arrival", Icon: IconBus, tone: "text-primary", title: a.title, body: a.body, push: Date.now() - a.createdAt < 5 * 60 * 1000,
+      id: a._id, kind: a.kind, Icon: ICON[a.kind], tone: TONE[a.kind], title: a.title, body: a.body, push: Date.now() - a.createdAt < 5 * 60 * 1000,
     }));
     if (user.notifyWeather && w) {
       const Icon = w.rainy ? IconRainy : w.hot ? IconSun : IconCloudy;
@@ -64,9 +66,14 @@ export function useAlerts(user: Doc<"users">) {
 
 export function AlertsScreen({ user }: { user: Doc<"users"> }) {
   const alerts = useAlerts(user);
+  const hasSaved = (useQuery(api.alerts.mine) ?? []).length > 0;
+  const clear = useMutation(api.alerts.clear);
   return (
     <div className="h-full overflow-y-auto px-4 pb-32 pt-4">
-      <h1 className="mb-3 text-[28px]">Alerts</h1>
+      <div className="mb-3 flex items-center justify-between">
+        <h1 className="text-[28px]">Alerts</h1>
+        {hasSaved && <button onClick={() => clear()} className="rounded-full bg-card px-3.5 py-1.5 text-[14px] text-foreground">Clear</button>}
+      </div>
       <div className="flex flex-col gap-2">
         {alerts.length === 0 && (
           <div className="flex flex-col items-center py-8 text-center">
