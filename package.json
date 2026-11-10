@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "deploy:revisions": "sh scripts/deploy-revisions.sh",
+    "deploy:live": "sh scripts/deploy-live.sh"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.9.25",

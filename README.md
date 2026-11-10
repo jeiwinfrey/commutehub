@@ -27,3 +27,12 @@ Icons come from Central Icons (`central-icons`), which needs your own license.
 
 - Illustrations live in `public/illustrations/`; their prompts are in `prompt.md`.
 - Mobile only: on wider screens the app shows as a centered phone-sized column.
+
+## Branches and deploys
+
+| Branch | Vercel project | Backend (Convex) | Deploy |
+|---|---|---|---|
+| `main` | `commutehub` (live) | production deployment | `pnpm deploy:live` and `npx convex deploy` |
+| `revisions` | `commutehub-revisions` | dev deployment | `pnpm deploy:revisions` and `npx convex dev --once` |
+
+Work on `revisions`, check it on its own link, then merge into `main` when it's ready. Both deploy scripts read the Vercel project links from the git-ignored `.vercel/` folder.
