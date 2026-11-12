@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
+import { BatacTransfer } from "./batac-transfer";
 import { MapView } from "./map-view";
 import { FromTo, RadiusSlider, RideChooser, VehicleList, WeatherChip, fmtRadius } from "./parts";
 import { Squircle } from "./squircle";
@@ -35,8 +36,8 @@ function TricycleSuggestion({ destination }: { destination: string }) {
   );
 }
 
-function RideAlternative({ t, vehicleId, onPlan }: {
-  t: Tracker; vehicleId: string | null; onPlan: () => void;
+function RideAlternative({ t, vehicleId, onTrack, onPlan }: {
+  t: Tracker; vehicleId: string | null; onTrack: (route: string, vehicle: string) => void; onPlan: () => void;
 }) {
   if (!t.active) return null;
   const usual = t.active.vehicles.find(({ v, status }) =>
@@ -44,8 +45,30 @@ function RideAlternative({ t, vehicleId, onPlan }: {
   );
   if (t.active.servesPickup && usual?.v.seat === "open") return null;
 
+  const modern = t.services
+    .filter(({ route, servesPickup }) =>
+      servesPickup && route.type === "modern_jeepney" && route.slug !== t.active?.route.slug,
+    )
+    .flatMap(({ route, vehicles }) => vehicles
+      .filter(({ status, v }) => status === "incoming" && v.seat !== "full")
+      .map((vehicle) => ({ ...vehicle, route })))
+    .sort((a, b) => a.eta - b.eta)[0];
+
   return (
-    <section aria-label="Limited ride availability" className="mb-3">
+    <section aria-label="Limited ride availability" className="mb-3 space-y-2">
+      {modern && (
+        <button
+          type="button"
+          onClick={() => onTrack(modern.route.slug, modern.v._id)}
+          className="block min-h-10 w-full rounded-2xl bg-card p-3 text-left"
+        >
+          <span className="block text-[15px] text-foreground">Track a modern jeepney</span>
+          <span className="text-[13px] tabular-nums">
+            {modern.v.label} · {modern.eta} min · {modern.v.seat === "few" ? "Few seats" : "Open seats"}
+          </span>
+        </button>
+      )}
+      <BatacTransfer from={t.from} to={t.to} />
       <TricycleSuggestion destination={t.toPlace?.name ?? "your destination"} />
       <button type="button" onClick={onPlan} className="mt-1 min-h-10 px-3 text-left text-[13px] text-primary underline underline-offset-2">
         View route information
@@ -55,9 +78,9 @@ function RideAlternative({ t, vehicleId, onPlan }: {
 }
 
 /** Step 3: pick one vehicle. A fixed card at its final size; only the vehicle list scrolls. */
-function DetailsCard({ t, vehicleId, onSelect, onPlan, onChangeRide, onNext }: {
+function DetailsCard({ t, vehicleId, onSelect, onTrack, onPlan, onChangeRide, onNext }: {
   t: Tracker; vehicleId: string | null; onSelect: (id: string) => void;
-  onPlan: () => void; onChangeRide: () => void; onNext: () => void;
+  onTrack: (route: string, vehicle: string) => void; onPlan: () => void; onChangeRide: () => void; onNext: () => void;
 }) {
   return (
     <div className={`absolute inset-x-4 ${LIFT} z-20`}>
@@ -67,7 +90,7 @@ function DetailsCard({ t, vehicleId, onSelect, onPlan, onChangeRide, onNext }: {
           <button onClick={onChangeRide} className={CHIP_BTN}>Change ride</button>
         </div>
         <div className="mb-3 min-h-0 flex-1 overflow-y-auto">
-          <RideAlternative t={t} vehicleId={vehicleId} onPlan={onPlan} />
+          <RideAlternative t={t} vehicleId={vehicleId} onTrack={onTrack} onPlan={onPlan} />
           <VehicleList t={t} selectedId={vehicleId} onSelect={onSelect} />
         </div>
         <button disabled={!vehicleId} onClick={onNext} className={PRIMARY_BTN}>{vehicleId ? "Set pickup alert" : "Select a vehicle to set an alert"}</button>
@@ -163,6 +186,7 @@ export function HomeScreen({ initialFrom, initialTo, onPlan }: {
           {t.hasRoutes === false ? (
             <>
               <p className="my-3 text-[13px]">No direct ride to track between these places.</p>
+              <div className="mb-2 empty:hidden"><BatacTransfer from={t.from} to={t.to} /></div>
               <TricycleSuggestion destination={t.toPlace?.name ?? "your destination"} />
               <button onClick={openPlan} className={`${PRIMARY_BTN} mt-4`}>Explore routes with transfers</button>
             </>
@@ -203,6 +227,7 @@ export function HomeScreen({ initialFrom, initialTo, onPlan }: {
           t={t}
           vehicleId={vehicleId}
           onSelect={setVehicleId}
+          onTrack={(route, vehicle) => { t.setSelected(route); setVehicleId(vehicle); }}
           onPlan={openPlan}
           onChangeRide={() => { setVehicleId(null); setStep("ride"); }}
           onNext={() => setStep("zone")}

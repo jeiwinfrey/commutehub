@@ -1,6 +1,6 @@
 # CommuteHub
 
-A mobile-first PWA for commuters in Ilocos Norte: ride tracking with simulated vehicle positions, ETAs and seat status, a planner for direct and transfer routes, weather alerts, and pickup alerts for approaching vehicles. When the selected service has limited availability, tracking suggests asking a tricycle driver for a one-way ride to the destination, regardless of distance.
+A mobile-first PWA for commuters in Ilocos Norte: ride tracking with simulated vehicle positions, ETAs and seat status, a planner for direct and transfer routes, weather alerts, and pickup alerts for approaching vehicles. When the selected service has limited availability, tracking suggests an approaching modern jeepney with seats, when available, and a one-way tricycle ride. For Laoag to Batac or MMSU, tracking and trip planning also show the highway bus and tricycle transfer.
 
 Built with Next.js, Convex, Clerk (Google sign-in), shadcn/ui, mapcn (MapLibre), Lisse, motion and OSRM routes.
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { IconBus, IconArrowRightLeft } from "central-icons";
+import { BatacTransfer } from "./batac-transfer";
 import { Squircle } from "./squircle";
 import { SelectField } from "./sheet-picker";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -81,6 +82,7 @@ export function PlanScreen({ initialFrom, initialTo, limitedRoute }: { initialFr
           );
         })}
       </Accordion>
+      <div className="mt-3 empty:hidden"><BatacTransfer from={from} to={to} /></div>
     </div>
   );
 }
