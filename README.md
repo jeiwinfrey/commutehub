@@ -1,6 +1,6 @@
 # CommuteHub
 
-A mobile-first PWA for commuters in Ilocos Norte: ride tracking with simulated vehicle positions, ETAs and seat status, a planner for direct and transfer routes, weather alerts, and pickup alerts for approaching vehicles. When the selected service has limited availability, tracking suggests a nearby alternative or links to the planner for the same trip.
+A mobile-first PWA for commuters in Ilocos Norte: ride tracking with simulated vehicle positions, ETAs and seat status, a planner for direct and transfer routes, weather alerts, and pickup alerts for approaching vehicles. When the selected service has limited availability, tracking suggests asking a tricycle driver for a one-way ride to the destination, regardless of distance.
 
 Built with Next.js, Convex, Clerk (Google sign-in), shadcn/ui, mapcn (MapLibre), Lisse, motion and OSRM routes.
 

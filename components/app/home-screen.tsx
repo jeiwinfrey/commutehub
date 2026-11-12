@@ -5,9 +5,9 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { MapView } from "./map-view";
-import { FromTo, RadiusSlider, RideChooser, SeatBadge, VehicleList, WeatherChip, fmtRadius } from "./parts";
+import { FromTo, RadiusSlider, RideChooser, VehicleList, WeatherChip, fmtRadius } from "./parts";
 import { Squircle } from "./squircle";
-import { TYPE_LABEL, useTracker, type Tracker } from "@/lib/use-tracker";
+import { useTracker, type Tracker } from "@/lib/use-tracker";
 import { useWeather } from "@/lib/use-weather";
 import { WeatherSheet } from "./weather-sheet";
 import { ensurePermission } from "@/lib/notify";
@@ -26,53 +26,38 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RideAlternatives({ t, vehicleId, onSelect, onPlan }: {
-  t: Tracker; vehicleId: string | null; onSelect: (route: string, vehicleId: string) => void; onPlan: () => void;
+function TricycleSuggestion({ destination }: { destination: string }) {
+  return (
+    <div className="rounded-2xl bg-card p-3">
+      <p className="text-[15px] text-foreground">One-way tricycle ride</p>
+      <p className="mt-1 text-[13px]">Ask a tricycle driver if they can take you directly to {destination}.</p>
+    </div>
+  );
+}
+
+function RideAlternative({ t, vehicleId, onPlan }: {
+  t: Tracker; vehicleId: string | null; onPlan: () => void;
 }) {
   if (!t.active) return null;
-  const servesPickup = t.active.servesPickup;
-  const incoming = t.active.vehicles.filter((entry) => entry.status === "incoming");
-  const usual = vehicleId ? incoming.find(({ v }) => v._id === vehicleId) : incoming[0];
-  if (servesPickup && usual?.v.seat === "open") return null;
-
-  const alternatives = t.services
-    .filter((service) => service.servesPickup)
-    .flatMap(({ route, vehicles }) => vehicles
-      .filter(({ v, status }) => status === "incoming" && v.seat !== "full" && v._id !== usual?.v._id &&
-        (usual?.v.seat !== "few" || v.seat === "open" || !servesPickup))
-      .map((entry) => ({ ...entry, route })))
-    .sort((a, b) => Number(a.v.seat === "few") - Number(b.v.seat === "few") || a.eta - b.eta);
-  const alternative = alternatives[0];
+  const usual = t.active.vehicles.find(({ v, status }) =>
+    status === "incoming" && (!vehicleId || v._id === vehicleId),
+  );
+  if (t.active.servesPickup && usual?.v.seat === "open") return null;
 
   return (
-    <section aria-label="Other ways to ride" className="mb-3 rounded-2xl bg-card p-3">
-      <h3 className="text-[15px] text-foreground">Limited availability</h3>
-      {alternative ? (
-        <button
-          type="button"
-          onClick={() => onSelect(alternative.route.slug, alternative.v._id)}
-          className="mt-1 flex min-h-10 w-full items-center justify-between gap-2 rounded-xl bg-background px-3 py-2 text-left text-[13px]"
-        >
-          <span>
-            <span className="block text-foreground">Track {alternative.v.label}</span>
-            <span className="tabular-nums">{TYPE_LABEL[alternative.route.type]} · {alternative.eta} min</span>
-          </span>
-          <SeatBadge seat={alternative.v.seat} />
-        </button>
-      ) : (
-        <p className="mt-1 text-[13px]">No other approaching rides with more seats near this pickup.</p>
-      )}
-      <button type="button" onClick={onPlan} className="mt-1 min-h-10 text-left text-[13px] text-primary underline underline-offset-2">
-        Explore other routes from {t.fromPlace?.name ?? "your origin"}
+    <section aria-label="Limited ride availability" className="mb-3">
+      <TricycleSuggestion destination={t.toPlace?.name ?? "your destination"} />
+      <button type="button" onClick={onPlan} className="mt-1 min-h-10 px-3 text-left text-[13px] text-primary underline underline-offset-2">
+        View route information
       </button>
     </section>
   );
 }
 
 /** Step 3: pick one vehicle. A fixed card at its final size; only the vehicle list scrolls. */
-function DetailsCard({ t, vehicleId, onSelect, onAlternative, onPlan, onChangeRide, onNext }: {
+function DetailsCard({ t, vehicleId, onSelect, onPlan, onChangeRide, onNext }: {
   t: Tracker; vehicleId: string | null; onSelect: (id: string) => void;
-  onAlternative: (route: string, id: string) => void; onPlan: () => void; onChangeRide: () => void; onNext: () => void;
+  onPlan: () => void; onChangeRide: () => void; onNext: () => void;
 }) {
   return (
     <div className={`absolute inset-x-4 ${LIFT} z-20`}>
@@ -82,7 +67,7 @@ function DetailsCard({ t, vehicleId, onSelect, onAlternative, onPlan, onChangeRi
           <button onClick={onChangeRide} className={CHIP_BTN}>Change ride</button>
         </div>
         <div className="mb-3 min-h-0 flex-1 overflow-y-auto">
-          <RideAlternatives t={t} vehicleId={vehicleId} onSelect={onAlternative} onPlan={onPlan} />
+          <RideAlternative t={t} vehicleId={vehicleId} onPlan={onPlan} />
           <VehicleList t={t} selectedId={vehicleId} onSelect={onSelect} />
         </div>
         <button disabled={!vehicleId} onClick={onNext} className={PRIMARY_BTN}>{vehicleId ? "Set pickup alert" : "Select a vehicle to set an alert"}</button>
@@ -177,7 +162,8 @@ export function HomeScreen({ initialFrom, initialTo, onPlan }: {
           {t.from === t.to && <p className="mt-3 text-[13px]">Choose two different places.</p>}
           {t.hasRoutes === false ? (
             <>
-              <p className="mt-3 text-[13px]">No direct ride to track between these places.</p>
+              <p className="my-3 text-[13px]">No direct ride to track between these places.</p>
+              <TricycleSuggestion destination={t.toPlace?.name ?? "your destination"} />
               <button onClick={openPlan} className={`${PRIMARY_BTN} mt-4`}>Explore routes with transfers</button>
             </>
           ) : (
@@ -217,7 +203,6 @@ export function HomeScreen({ initialFrom, initialTo, onPlan }: {
           t={t}
           vehicleId={vehicleId}
           onSelect={setVehicleId}
-          onAlternative={(route, id) => { t.setSelected(route); setVehicleId(id); }}
           onPlan={openPlan}
           onChangeRide={() => { setVehicleId(null); setStep("ride"); }}
           onNext={() => setStep("zone")}
