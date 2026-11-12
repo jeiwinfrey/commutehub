@@ -45,7 +45,7 @@ export function PlanScreen({ initialFrom, initialTo, limitedRoute }: { initialFr
 
       {/* collapsed by default; one trip open at a time */}
       <Accordion type="single" collapsible className="mt-4 gap-3">
-        {trips.map(({ legs, fare }) => {
+        {trips.map(({ legs }) => {
           const transfers = legs.length - 1;
           const key = legs.map((leg) => `${leg.route._id}:${leg.from.slug}:${leg.to.slug}`).join("|");
           return (
@@ -55,7 +55,7 @@ export function PlanScreen({ initialFrom, initialTo, limitedRoute }: { initialFr
                   <span className="min-w-0 flex-1">
                     <span className="block text-[16px] text-foreground">{legs.map((leg) => TYPE_LABEL[leg.route.type]).join(" → ")}</span>
                     <span className="mt-0.5 block text-[13px]">
-                      {transfers === 0 ? "Direct" : `${transfers} transfer${transfers === 1 ? "" : "s"}`} · Est. ₱{Math.ceil(fare)}
+                      {transfers === 0 ? "Direct" : `${transfers} transfer${transfers === 1 ? "" : "s"}`}
                     </span>
                   </span>
                 </AccordionTrigger>

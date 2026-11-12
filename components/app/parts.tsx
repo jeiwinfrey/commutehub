@@ -55,7 +55,7 @@ export function RideChooser({ t }: { t: Tracker }) {
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[15px] text-foreground">{s.route.name}</span>
-                <span className="block text-[12px]">{TYPE_LABEL[s.route.type]} · ₱{s.route.fare}</span>
+                <span className="block text-[12px]">{TYPE_LABEL[s.route.type]}</span>
               </span>
               <span className="flex flex-col items-end gap-1">
                 <span className="text-[17px] tabular-nums text-foreground">{s.next === null ? "—" : `${s.next} min`}</span>

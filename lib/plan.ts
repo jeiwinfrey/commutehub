@@ -25,15 +25,8 @@ export function planTrips(routes: Route[], from: string, to: string, limitedRout
   findPaths(from, new Set([from]), []);
 
   return paths.map((legs) => {
-    let distance = 0;
-    let fare = 0;
-    for (const leg of legs) {
-      const meters = Math.abs(leg.to.at - leg.from.at);
-      const routeLength = leg.route.cum.at(-1) ?? 0;
-      distance += meters;
-      fare += routeLength > 0 ? leg.route.fare * meters / routeLength : leg.route.fare;
-    }
-    return { legs, distance, fare, usesLimitedRoute: legs.some(({ route }) => route.slug === limitedRoute) };
+    const distance = legs.reduce((meters, leg) => meters + Math.abs(leg.to.at - leg.from.at), 0);
+    return { legs, distance, usesLimitedRoute: legs.some(({ route }) => route.slug === limitedRoute) };
   }).sort((a, b) =>
     Number(a.usesLimitedRoute) - Number(b.usesLimitedRoute) ||
     a.legs.length - b.legs.length ||
