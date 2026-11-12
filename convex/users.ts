@@ -24,9 +24,9 @@ export const ensure = mutation({
       photo: id.pictureUrl,
       onboarded: false,
       classTime: "08:00",
-      notifyRush: true,
+      notifyRush: false,
       notifyWeather: true,
-      notifyDelay: true,
+      notifyDelay: false,
     });
   },
 });

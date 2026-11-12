@@ -3,14 +3,12 @@
 import { useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { IconBus, IconClockAlert, IconRainy, IconWarningSign } from "central-icons";
+import { IconBus, IconRainy } from "central-icons";
 import { BottomSheet } from "./sheet-picker";
 import { ensurePermission } from "@/lib/notify";
 
 const ITEMS = [
   { kind: "weather", label: "Weather", sub: "70% chance of rain", Icon: IconRainy },
-  { kind: "rush", label: "Rush hour", sub: "Starts in 20 minutes", Icon: IconClockAlert },
-  { kind: "delay", label: "Delay", sub: "Roadworks, +30 min", Icon: IconWarningSign },
   { kind: "arrival", label: "Arrival", sub: "Your vehicle is near", Icon: IconBus },
 ] as const;
 
@@ -22,7 +20,7 @@ export function PreviewAlerts({ row }: { row: (label: string, right: React.React
     <>
       {row("Preview alerts", <button onClick={() => setOpen(true)} className="rounded-full bg-background px-3.5 py-1.5 text-[14px] text-foreground">Try</button>)}
       <BottomSheet open={open} onClose={() => setOpen(false)} title="Preview alerts">
-        <p className="mb-3 text-[14px]">Send yourself a sample. You'll see the toast, get a notification if you allowed them, and find it in Alerts.</p>
+        <p className="mb-3 text-[14px]">Send yourself a sample. You’ll see the toast, get a notification if you allowed them, and find it in Alerts.</p>
         <div className="grid grid-cols-2 gap-2">
           {ITEMS.map(({ kind, label, sub, Icon }) => (
             <button

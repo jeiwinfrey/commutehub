@@ -1,6 +1,6 @@
 # CommuteHub
 
-A mobile-first PWA for commuters in Ilocos Norte: live jeepney, modern jeepney and bus ETAs with seat status, a leave-by time that reacts to delay reports, a transfer planner, weather and rush-hour alerts, and an arrival alert zone around your pickup.
+A mobile-first PWA for commuters in Ilocos Norte: ride tracking with simulated vehicle positions, ETAs and seat status, a planner for direct and transfer routes, weather alerts, and pickup alerts for approaching vehicles. When the selected service has limited availability, tracking suggests a nearby alternative or links to the planner for the same trip.
 
 Built with Next.js, Convex, Clerk (Google sign-in), shadcn/ui, mapcn (MapLibre), Lisse, motion and OSRM routes.
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useDragControls } from "motion/react";
 import { IconCheckmark1 } from "central-icons";
@@ -84,72 +84,6 @@ export function SelectField({ label, value, options, onChange, variant = "stack"
             </button>
           ))}
         </div>
-      </BottomSheet>
-    </>
-  );
-}
-
-const fmt = (v: string) => {
-  const [h, m] = v.split(":").map(Number);
-  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
-};
-
-const ITEM = 44; // row height
-const ROWS = 5; // visible rows; the middle one is selected
-
-/** One vertical scroll wheel that snaps rows to the center band. */
-function Wheel({ items, index, onChange, className }: { items: string[]; index: number; onChange: (i: number) => void; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [live, setLive] = useState(index);
-  useEffect(() => { if (ref.current) ref.current.scrollTop = index * ITEM; }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  return (
-    <div className={cn("relative", className)} style={{ height: ITEM * ROWS }}>
-      <div className="pointer-events-none absolute inset-x-0 rounded-2xl bg-card" style={{ top: ITEM * 2, height: ITEM }} />
-      <div
-        ref={ref}
-        className="relative h-full snap-y snap-mandatory overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ paddingBlock: ITEM * 2 }}
-        onScroll={(e) => {
-          const i = Math.min(items.length - 1, Math.max(0, Math.round(e.currentTarget.scrollTop / ITEM)));
-          if (i !== live) { setLive(i); onChange(i); }
-        }}
-      >
-        {items.map((label, i) => (
-          <button
-            key={label}
-            onClick={() => ref.current?.scrollTo({ top: i * ITEM, behavior: "smooth" })}
-            className={cn("flex w-full snap-center items-center justify-center text-[22px] [scroll-snap-stop:always]", i === live ? "text-foreground" : "text-muted-foreground/60")}
-            style={{ height: ITEM }}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const HOURS = Array.from({ length: 12 }, (_, i) => String(i + 1));
-const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, "0"));
-const PERIOD = ["AM", "PM"];
-
-/** Custom time picker: vertical scroll wheels for hour, minute and AM/PM. Value is "HH:MM" (24h). */
-export function TimeField({ label, value, onChange, variant = "pill" }: { label: string; value: string; onChange: (v: string) => void; variant?: Variant }) {
-  const [open, setOpen] = useState(false);
-  const [h24, m] = value.split(":").map(Number);
-  const pm = h24 >= 12;
-  const h12 = h24 % 12 || 12;
-  const set = (h: number, min: number, isPm: boolean) => onChange(`${String((h % 12) + (isPm ? 12 : 0)).padStart(2, "0")}:${String(min).padStart(2, "0")}`);
-  return (
-    <>
-      <Trigger variant={variant} label={label} value={fmt(value)} onClick={() => setOpen(true)} />
-      <BottomSheet open={open} onClose={() => setOpen(false)} title={label}>
-        <div className="mb-4 flex gap-2">
-          <Wheel className="flex-1" items={HOURS} index={h12 - 1} onChange={(i) => set(i + 1, m, pm)} />
-          <Wheel className="flex-1" items={MINUTES} index={m} onChange={(i) => set(h12, i, pm)} />
-          <Wheel className="w-24" items={PERIOD} index={pm ? 1 : 0} onChange={(i) => set(h12, m, i === 1)} />
-        </div>
-        <button onClick={() => setOpen(false)} className="w-full rounded-full bg-foreground py-4 text-[16px] text-background">Done</button>
       </BottomSheet>
     </>
   );

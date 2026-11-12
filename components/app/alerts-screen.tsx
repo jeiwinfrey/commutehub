@@ -5,68 +5,44 @@ import Image from "next/image";
 import type { Doc } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { IconBus, IconCloudy, IconRainy, IconSun, IconClockAlert, IconWarningSign } from "central-icons";
+import { IconBus, IconCloudy, IconRainy, IconSun } from "central-icons";
 import { Squircle } from "./squircle";
 import { useWeather } from "@/lib/use-weather";
 import { notifyOnce, toastOnce } from "@/lib/notify";
-import { cn } from "@/lib/utils";
 
-type Alert = { id: string; kind: "rush" | "weather" | "delay" | "arrival"; title: string; body: string; Icon: typeof IconSun; tone: string; push?: boolean };
+type Alert = { id: string; kind: "weather" | "arrival"; title: string; body: string; Icon: typeof IconSun; push?: boolean; createdAt?: number };
 
-const KIND = { roadworks: "Roadworks", accident: "Accident", traffic: "Heavy traffic", flood: "Flooding" } as const;
-
-export function useAlerts(user: Doc<"users">) {
-  const w = useWeather();
-  const reports = useQuery(api.reports.active) ?? [];
-  const arrivals = useQuery(api.alerts.mine) ?? [];
-  const now = new Date();
-  const mins = now.getHours() * 60 + now.getMinutes();
-  const weekday = now.getDay() >= 1 && now.getDay() <= 5;
-  const toPeak = 17 * 60 - mins;
-  const home = user.homePlace ?? "your stop";
-
+function useAlerts(user: Doc<"users">) {
+  const weather = useWeather();
+  const saved = useQuery(api.alerts.mine);
   return useMemo(() => {
-    const ICON = { weather: IconRainy, rush: IconClockAlert, delay: IconWarningSign, arrival: IconBus } as const;
-    const TONE = { weather: "text-primary", rush: "text-success", delay: "text-destructive", arrival: "text-primary" } as const;
-    const list: Alert[] = arrivals.map((a) => ({
-      id: a._id, kind: a.kind, Icon: ICON[a.kind], tone: TONE[a.kind], title: a.title, body: a.body, push: Date.now() - a.createdAt < 5 * 60 * 1000,
-    }));
-    if (user.notifyWeather && w) {
-      const Icon = w.rainy ? IconRainy : w.hot ? IconSun : IconCloudy;
-      list.push({
-        id: "weather", kind: "weather", Icon, tone: "text-primary",
-        title: w.rainy ? `${w.rainChance}% chance of rain` : w.hot ? `It's ${w.temp}° out` : `${w.temp}° · ${w.label}`,
-        body: w.rainy ? "Bring an umbrella or rain jacket before you leave." : w.hot ? "Bring water and a hat, and leave a little earlier." : "No weather problems on your usual route.",
-        push: w.rainy || w.hot,
+    const alerts: Alert[] = [];
+    for (const alert of saved ?? []) {
+      if (alert.kind !== "arrival" && alert.kind !== "weather") continue;
+      alerts.push({
+        id: alert._id,
+        kind: alert.kind,
+        title: alert.title,
+        body: alert.body,
+        Icon: alert.kind === "arrival" ? IconBus : IconRainy,
+        createdAt: alert.createdAt,
       });
     }
-    if (user.notifyRush) {
-      const soon = weekday && toPeak <= 20 && toPeak > -60;
-      list.push({
-        id: "rush", kind: "rush", Icon: IconClockAlert, tone: "text-success",
-        title: soon ? (toPeak > 0 ? `Rush hour in ${toPeak} min` : "Rush hour is on now") : "Rush hour 5–6 PM",
-        body: now.getDay() === 5 ? `Friday crush near ${home}. Leave before 4:40 PM or wait elsewhere.` : `Expect full vehicles near ${home}. Leave before 4:40 PM to beat it.`,
-        push: soon,
+    if (user.notifyWeather && weather) {
+      const { rainy, hot, rainChance, temp, label } = weather;
+      alerts.push({
+        id: "weather", kind: "weather", Icon: rainy ? IconRainy : hot ? IconSun : IconCloudy,
+        title: rainy ? `${rainChance}% chance of rain` : hot ? `It's ${temp}° out` : `${temp}° · ${label}`,
+        body: rainy ? "Bring an umbrella or rain jacket before you leave." : hot ? "Bring water and a hat." : "Conditions are clear for your commute.",
+        push: rainy || hot,
       });
     }
-    if (user.notifyDelay) {
-      for (const r of reports) {
-        list.push({
-          id: r._id, kind: "delay", Icon: IconWarningSign, tone: "text-destructive",
-          title: `${KIND[r.kind]} · +${r.delayMin} min`,
-          body: `Reported by ${r.authorName} ${Math.max(1, Math.round((Date.now() - r.createdAt) / 60000))} min ago. Expires in ${Math.max(1, Math.round((r.expiresAt - Date.now()) / 60000))} min.`,
-          push: true,
-        });
-      }
-    }
-    return list;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [w, reports.length, arrivals.length, user.notifyWeather, user.notifyRush, user.notifyDelay, toPeak, home]);
+    return { alerts, hasSaved: alerts.some((alert) => alert.id !== "weather") };
+  }, [weather, saved, user.notifyWeather]);
 }
 
 export function AlertsScreen({ user }: { user: Doc<"users"> }) {
-  const alerts = useAlerts(user);
-  const hasSaved = (useQuery(api.alerts.mine) ?? []).length > 0;
+  const { alerts, hasSaved } = useAlerts(user);
   const clear = useMutation(api.alerts.clear);
   return (
     <div className="h-full overflow-y-auto px-4 pb-32 pt-4">
@@ -78,12 +54,12 @@ export function AlertsScreen({ user }: { user: Doc<"users"> }) {
         {alerts.length === 0 && (
           <div className="flex flex-col items-center py-8 text-center">
             <Image src="/illustrations/empty-alerts.svg" alt="A quiet bell with a check" width={220} height={220} />
-            <p className="text-[14px]">You're all caught up.</p>
+            <p className="text-[14px]">You’re all caught up.</p>
           </div>
         )}
         {alerts.map((a) => (
           <Squircle key={a.id} radius={24} className="flex gap-3 bg-card p-4">
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-background"><a.Icon size={24} className={cn(a.tone)} /></span>
+            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-background"><a.Icon size={24} className="text-primary" /></span>
             <span>
               <span className="block text-[16px] text-foreground">{a.title}</span>
               <span className="block text-[13px]">{a.body}</span>
@@ -97,12 +73,13 @@ export function AlertsScreen({ user }: { user: Doc<"users"> }) {
 
 /** Mounted once in the shell so push-style alerts fire from any tab. */
 export function AlertNotifier({ user }: { user: Doc<"users"> }) {
-  const alerts = useAlerts(user);
+  const { alerts } = useAlerts(user);
   useEffect(() => {
     for (const a of alerts) {
-      if (!a.push) continue;
+      const recent = a.createdAt !== undefined && Date.now() - a.createdAt < 5 * 60 * 1000;
+      if (!a.push && !recent) continue;
       const key = `${a.kind}-${a.id}`;
-      toastOnce(key, a.kind === "arrival" ? "success" : a.kind === "delay" ? "warning" : "info", a.title, a.body);
+      toastOnce(key, a.kind === "arrival" ? "success" : "info", a.title, a.body);
       notifyOnce(key, a.title, a.body);
     }
   }, [alerts]);

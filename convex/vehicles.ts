@@ -14,15 +14,12 @@ export const tick = internalMutation({
   args: {},
   handler: async (ctx) => {
     const routes = new Map((await ctx.db.query("routes").collect()).map((r) => [r._id, r]));
-    const now = Date.now();
-    const slow = (await ctx.db.query("reports").collect()).filter((r) => r.expiresAt > now);
     const moved = new Map<string, { progress: number; dir: 1 | -1 }>();
     for (const veh of await ctx.db.query("vehicles").collect()) {
       const route = routes.get(veh.routeId);
       if (!route) continue;
       const total = route.cum[route.cum.length - 1];
-      const factor = slow.some((r) => r.routeId === veh.routeId) ? 0.5 : 1;
-      let progress = veh.progress + veh.dir * veh.speed * 10 * factor;
+      let progress = veh.progress + veh.dir * veh.speed * 10;
       const dir = veh.dir; // fixed role: outbound vehicles always head to the destination, inbound ones back
       if (dir === 1 && progress >= total) progress -= total; // back to the start of the run
       if (dir === -1 && progress <= 0) progress += total;

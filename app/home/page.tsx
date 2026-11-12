@@ -18,6 +18,7 @@ export default function HomePage() {
   const user = useQuery(api.users.me);
   const ensure = useMutation(api.users.ensure);
   const [tab, setTab] = useState<TabId>("home");
+  const [planStops, setPlanStops] = useState<{ from: string; to: string; limitedRoute?: string } | null>(null);
 
   useEffect(() => { if (!isLoading && !isAuthenticated) router.replace("/"); }, [isLoading, isAuthenticated, router]);
   useEffect(() => { if (isAuthenticated && user === null) ensure(); }, [isAuthenticated, user, ensure]);
@@ -32,15 +33,25 @@ export default function HomePage() {
         <div className="relative h-full">
           <AlertNotifier user={user} />
           {tab === "home" ? (
-            <HomeScreen classTime={user.classTime} />
+            <HomeScreen
+              initialFrom={user.homePlace ?? "laoag"}
+              initialTo={user.schoolPlace ?? "batac"}
+              onPlan={(from, to, limitedRoute) => { setPlanStops({ from, to, limitedRoute }); setTab("plan"); }}
+            />
           ) : (
             <div className="h-full pt-[env(safe-area-inset-top)]">
-              {tab === "plan" && <PlanScreen />}
+              {tab === "plan" && (
+                <PlanScreen
+                  initialFrom={planStops?.from ?? user.homePlace ?? "bacarra"}
+                  initialTo={planStops?.to ?? user.schoolPlace ?? "mmsu"}
+                  limitedRoute={planStops?.limitedRoute}
+                />
+              )}
               {tab === "alerts" && <AlertsScreen user={user} />}
               {tab === "me" && <MeScreen user={user} />}
             </div>
           )}
-          <TabBar active={tab} onChange={setTab} floating onMap={tab === "home"} />
+          <TabBar active={tab} onChange={(next) => { if (next !== tab) setPlanStops(null); setTab(next); }} floating onMap={tab === "home"} />
         </div>
       )}
     </PhoneFrame>

@@ -31,7 +31,7 @@ export default function Home() {
           <motion.div key="in" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex h-full flex-col justify-end gap-3 p-6 pb-[calc(env(safe-area-inset-bottom)+24px)] pt-[calc(env(safe-area-inset-top)+24px)]">
             <div className="grid flex-1 place-items-center"><Image src="/illustrations/signin.svg" alt="A student waving at an approaching jeepney" width={320} height={320} priority /></div>
             <h1 className="text-[30px]">Know when your ride comes</h1>
-            <p className="mb-3 text-[15px]">Live jeepney and bus ETAs, seat status and the best time to leave.</p>
+            <p className="mb-3 text-[15px]">Track rides, check seat availability, and get an alert when your ride is near.</p>
             <button
               disabled={busy || !signIn}
               onClick={() => {

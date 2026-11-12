@@ -13,20 +13,20 @@ export const mine = query({
   handler: async (ctx) => {
     const user = await me(ctx);
     if (!user) return [];
-    return ctx.db.query("alerts").withIndex("by_user", (q) => q.eq("userId", user._id)).order("desc").take(10);
+    return ctx.db.query("alerts").withIndex("by_user", (q) => q.eq("userId", user._id))
+      .filter((q) => q.or(q.eq(q.field("kind"), "weather"), q.eq(q.field("kind"), "arrival")))
+      .order("desc").take(10);
   },
 });
 
 // Sample content for each alert kind, used by the preview buttons.
 const SAMPLES = {
   weather: { title: "70% chance of rain", body: "Bring an umbrella or rain jacket before you leave." },
-  rush: { title: "Rush hour in 20 min", body: "Expect full vehicles near your stop. Leave before 4:40 PM to beat it." },
-  delay: { title: "Roadworks · +30 min", body: "Reported on your route a few minutes ago. It clears on its own in 45 minutes." },
 } as const;
 
 // Creates one alert of the given kind for the signed-in user, the same way a real one is created.
 export const preview = mutation({
-  args: { kind: v.union(v.literal("weather"), v.literal("rush"), v.literal("delay"), v.literal("arrival")) },
+  args: { kind: v.union(v.literal("weather"), v.literal("arrival")) },
   handler: async (ctx, { kind }) => {
     const user = await me(ctx);
     if (!user) throw new Error("Not signed in");

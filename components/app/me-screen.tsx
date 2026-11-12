@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "convex/react";
 import { useClerk, useUser } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
 import { Squircle } from "./squircle";
-import { SelectField, TimeField } from "./sheet-picker";
+import { SelectField } from "./sheet-picker";
 import { ensurePermission } from "@/lib/notify";
 import { Switch } from "@/components/ui/switch";
 import { InstallGuide } from "./install-guide";
@@ -39,19 +39,14 @@ export function MeScreen({ user }: { user: Doc<"users"> }) {
         <Row label="Home stop">
           <SelectField variant="pill" label="Home stop" value={user.homePlace ?? ""} options={opts} onChange={(v) => update({ homePlace: v })} />
         </Row>
-        <Row label="School">
-          <SelectField variant="pill" label="School" value={user.schoolPlace ?? ""} options={opts} onChange={(v) => update({ schoolPlace: v })} />
-        </Row>
-        <Row label="First class at">
-          <TimeField label="First class at" value={user.classTime} onChange={(v) => update({ classTime: v })} />
+        <Row label="School or work">
+          <SelectField variant="pill" label="School or work" value={user.schoolPlace ?? ""} options={opts} onChange={(v) => update({ schoolPlace: v })} />
         </Row>
       </Squircle>
 
       <h2 className="mb-1 mt-4 px-1 text-[13px] text-muted-foreground">Notifications</h2>
       <Squircle radius={24} className="bg-card px-4 py-1">
-        <Row label="Rush-hour alerts"><Switch checked={user.notifyRush} onCheckedChange={(v) => { update({ notifyRush: v }); if (v) ensurePermission(); }} /></Row>
-        <Row label="Weather alerts"><Switch checked={user.notifyWeather} onCheckedChange={(v) => { update({ notifyWeather: v }); if (v) ensurePermission(); }} /></Row>
-        <Row label="Delay reports"><Switch checked={user.notifyDelay} onCheckedChange={(v) => { update({ notifyDelay: v }); if (v) ensurePermission(); }} /></Row>
+        <Row label="Weather alerts"><Switch aria-label="Weather alerts" checked={user.notifyWeather} onCheckedChange={(v) => { update({ notifyWeather: v }); if (v) ensurePermission(); }} /></Row>
       </Squircle>
 
       <h2 className="mb-1 mt-4 px-1 text-[13px] text-muted-foreground">App</h2>

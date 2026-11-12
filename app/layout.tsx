@@ -11,7 +11,7 @@ const varela = Varela_Round({
 
 export const metadata: Metadata = {
   title: "CommuteHub",
-  description: "Know when your ride comes and when to leave.",
+  description: "Track rides, explore routes, and get pickup and weather alerts.",
   appleWebApp: { capable: true, title: "CommuteHub", statusBarStyle: "default" },
   other: { "apple-mobile-web-app-capable": "yes" }, // older iPhones only look for the apple-prefixed tag
   icons: { icon: "/icon-192", apple: [{ url: "/icon-512", sizes: "512x512", type: "image/png" }] },

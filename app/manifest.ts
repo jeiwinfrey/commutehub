@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "CommuteHub",
     short_name: "CommuteHub",
-    description: "Live jeepney and bus ETAs, seat status and your best time to leave.",
+    description: "Track rides, explore routes, and get pickup and weather alerts.",
     start_url: "/home",
     display: "standalone",
     orientation: "portrait",
